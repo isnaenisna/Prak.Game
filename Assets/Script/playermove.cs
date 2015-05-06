@@ -5,20 +5,23 @@ public class playermove : MonoBehaviour {
 
 	Vector3 position;
 	bool jump;
-	float speedmove=50;
-	float speedjump=300;
+	float speedmove=3;
+	float speedjump=200;
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.A)) {
+		if (Input.GetKey (KeyCode.A)) {
+            audio.Play();
 			position= transform.position+Vector3.left;
 			this.gameObject.transform.position = Vector3.MoveTowards (transform.position, position, speedmove * Time.deltaTime);
 		}
 
-		if (Input.GetKeyDown (KeyCode.D)) {
+		if (Input.GetKey (KeyCode.D)) {
+            audio.Play();
 			position= transform.position+Vector3.right;
 			this.gameObject.transform.position = Vector3.MoveTowards (transform.position, position, speedmove * Time.deltaTime);
 		}
 		if (!jump) {
-			if (Input.GetKeyDown (KeyCode.Space)) {
+			if (Input.GetKey (KeyCode.Space)) {
+                audio.Play();
 				GetComponent<Rigidbody> ().velocity = Vector3.zero;
 				GetComponent<Rigidbody> ().AddForce (Vector3.up * speedjump);		
 			}
@@ -26,12 +29,14 @@ public class playermove : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision other){
-		//jump = false;;
-		Debug.Log ("Tersentuh");
+		//Debug.Log ("Tersentuh");
+        if (other.gameObject.tag == "Point")
+            other.gameObject.audio.Play();
 	}
 
 	void OnCollisionExit(Collision other){
-		//jump = true;
-		Debug.Log ("Terlepas");
+		//Debug.Log ("Terlepas");
+        if (other.gameObject.tag == "Point")
+            other.gameObject.audio.Stop();
 	}
 }
